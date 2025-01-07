@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 // Struttura base per un nuovo articolo
@@ -6,12 +7,30 @@ const initialFormData = {
   titolo: "",
   immagine: "",
   contenuto: "",
-}
+};
+
+const apiUrl = "http://localhost:3001";
 
 function App() {
   const [article, setArticle] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
 
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  const getPosts = () => {
+    axios.get(`${apiUrl}/posts`)
+  .then((response) => {
+    console.log("Dati ricevuti:", response);
+    setArticle(response.data.posts);
+  })
+  .catch((error) => {
+    console.error("Errore durante la richiesta:", error);
+    alert("Errore di rete. Impossibile recuperare i post.");
+  });
+  }
+  
   // Gestione del modulo quando viene inviato
   const handleArticleForm = (event) => {
     event.preventDefault();
