@@ -36,11 +36,13 @@ function App() {
   };
 
   const cancel = (idToDelete) => {
-    axios.delete(`${apiUrl}/pizzas/${idToDelete}`).then((resp) => {
-      const newArray = article.filter(curArticle => curArticle.id !== idToDelete);
-      setArticle(newArray);
-    }); 
+    axios.delete(`${apiUrl}/posts/${idToDelete}`)
+      .then((resp) => {
+        const newArray = article.filter(curArticle => curArticle.id !== idToDelete);
+        setArticle(newArray);
+      })
   };
+  
 
   const handleInputChange = (event) => {
     const keyToChange = event.target.name; // Nome del campo modificato.
