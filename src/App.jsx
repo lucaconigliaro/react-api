@@ -21,37 +21,26 @@ function App() {
 
   const getPosts = () => {
     axios.get(`${apiUrl}/posts`)
-  .then((response) => {
-    console.log("Dati ricevuti:", response);
-    setArticle(response.data.posts);
-  })
-  .catch((error) => {
-    console.error("Errore durante la richiesta:", error);
-    alert("Errore di rete. Impossibile recuperare i post.");
-  });
-  }
-  
-  // Gestione del modulo quando viene inviato
+      .then((response) => {
+        setArticle(response.data.data);
+      })
+  };
   const handleArticleForm = (event) => {
     event.preventDefault();
-    if (formData.titolo !== "") {
-
-      const newArticle = {
-        ...formData, // Copia tutti i dati attualmente nel modulo.
-        id: Date.now() // Aggiunge un ID unico basato sull'ora attuale.
-      };
-
-      const newArray = [...article, newArticle]; // Crea un nuovo array con l'articolo aggiunto.
-      setArticle(newArray);
-
-      setFormData(initialFormData);
-    };
+    axios.post(`${apiUrl}/posts`, formData)
+      .then((resp) => {
+        const newArray = [...article, resp.data];
+        setArticle(newArray);
+        setFormData(initialFormData);
+      })
   };
 
   const cancel = (idToDelete) => {
-    const newArray = article.filter(curArticle => curArticle.id !== idToDelete);
-    setArticle(newArray);
-  }
+    axios.delete(`${apiUrl}/pizzas/${idToDelete}`).then((resp) => {
+      const newArray = article.filter(curArticle => curArticle.id !== idToDelete);
+      setArticle(newArray);
+    }); 
+  };
 
   const handleInputChange = (event) => {
     const keyToChange = event.target.name; // Nome del campo modificato.
