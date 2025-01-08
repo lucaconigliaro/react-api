@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import AppCard from "./components/AppCard";
 
 // Struttura base per un nuovo articolo
 const initialFormData = {
@@ -9,7 +10,7 @@ const initialFormData = {
   contenuto: "",
 };
 
-const apiUrl = "http://localhost:3001";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function App() {
   const [article, setArticle] = useState([]);
@@ -21,8 +22,8 @@ function App() {
 
   const getPosts = () => {
     axios.get(`${apiUrl}/posts`)
-      .then((response) => {
-        setArticle(response.data.data);
+      .then((resp) => {
+        setArticle(resp.data.data);
       })
   };
 
@@ -38,12 +39,11 @@ function App() {
 
   const cancel = (idToDelete) => {
     axios.delete(`${apiUrl}/posts/${idToDelete}`)
-      .then((resp) => {
-        const newArray = article.filter(curArticle => curArticle.id !== idToDelete);
+      .then(() => {
+        const newArray = article.filter((curArticle) => curArticle.id !== idToDelete);
         setArticle(newArray);
       })
   };
-  
 
   const handleInputChange = (event) => {
     const keyToChange = event.target.name; // Nome del campo modificato.
@@ -57,23 +57,17 @@ function App() {
     setFormData(newData);
   };
 
+
   return (
     <>
       <div className="container">
         <section>
           <h2>Nuovi Articoli</h2>
           {article.length > 0 ? (
-            <div className="row row-cols-4">
+            <div className="card-container">
               {article.map((curArticle) => (
                 <div className="col" key={curArticle.id}>
-                  <div className="card small-card">
-                    <img src={curArticle.immagine} alt={curArticle.titolo} className="card-img-top" />
-                    <div className="card-body">
-                      <h4>{curArticle.titolo}</h4>
-                      <p>{curArticle.contenuto}</p>
-                      <button onClick={() => cancel(curArticle.id)} className="btn btn-danger">🗑️ Elimina</button>
-                    </div>
-                  </div>
+                  <AppCard post={curArticle} onCancel={() => cancel(curArticle.id)} />
                 </div>
               ))}
             </div>
