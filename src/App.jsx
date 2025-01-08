@@ -25,6 +25,7 @@ function App() {
         setArticle(response.data.data);
       })
   };
+
   const handleArticleForm = (event) => {
     event.preventDefault();
     axios.post(`${apiUrl}/posts`, formData)
@@ -62,10 +63,10 @@ function App() {
         <section>
           <h2>Nuovi Articoli</h2>
           {article.length > 0 ? (
-            <div className="row row-cols-2">
+            <div className="row row-cols-4">
               {article.map((curArticle) => (
                 <div className="col" key={curArticle.id}>
-                  <div className="card">
+                  <div className="card small-card">
                     <img src={curArticle.immagine} alt={curArticle.titolo} className="card-img-top" />
                     <div className="card-body">
                       <h4>{curArticle.titolo}</h4>
